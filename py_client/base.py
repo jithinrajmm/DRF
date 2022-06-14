@@ -25,5 +25,14 @@ print(response.status_code)
 # status code is most importent is 200, 404, this all kind of status code will use ful for the
 # checking the errors and the status of the response from the server
 
+'''
+# def name():
+#     return 'jithin raj mm'
 
+# dic = {'name': name}
 
+# print(dic['name']())
+
+funciton name dictil save cheyyan pattuo enn nokiyathaan tta
+
+'''

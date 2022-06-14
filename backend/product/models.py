@@ -10,6 +10,10 @@ class Product(models.Model):
     
     def __str__(self):
         return self.title
+        
+    # extra clann method for serializerMethodFeild learning
+    def final_discount(self):
+        return 55
     class Meta:
         db_table = ''
         managed = True
