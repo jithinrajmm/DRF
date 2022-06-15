@@ -1,5 +1,5 @@
 
-from math import prod
+from xmlrpc.client import ResponseError
 from django.http import JsonResponse #first Line
 import json
 from product.models import Product
@@ -63,7 +63,7 @@ def api_views(request,*args,**kwargs):
           #This is used to converting the objects to dict method  
     return JsonResponse(data)'''
     
-    
+  
 # now we are usigng the django rest framework 
 # from rest_framwork.response import Response
 # from rest_framwork.decorator import api_view
@@ -78,3 +78,40 @@ def api_views(request):
         data = ProductSerilaizer(product).data
     # instead of the manual coversion of models_to_dict we are using the automated serializer
     return Response(data)
+    
+# post data start here POST
+#  WITH OUT SAVING DATA TO DATABASE
+# ONLY VALIDATION WITH THE SERILIZER AND MODELS  
+
+'''@api_view(['POST'])
+def post_view(request):
+    
+    serializer = ProductSerilaizer(data=request.data)
+     # This line is used to take the json data from the front end
+    
+    if serializer.is_valid():
+        return Response(serializer.data)
+    else:
+        return Response({'error':' not valide data you have send '})
+     '''
+# POST DATA IS SAVING AFTER THE 
+# SERILIZER VALIDATION 
+# MODEL VALIDATION
+@api_view(['POST'])
+def post_view(reqeust):
+    serilizer = ProductSerilaizer(data = reqeust.data)
+    
+    if serilizer.is_valid(raise_exception=True):
+        instance = serilizer.save()
+        serilizer = ProductSerilaizer(instance).data
+        return Response(serilizer)
+    else:
+        return Response({ 'message' : 'The validation is not proper'},status=400)
+        
+# djang0 Genericviews is written in the app product view check itr
+    
+    
+    
+    
+    
+    
