@@ -7,9 +7,18 @@ urlpatterns = [
     path('',views.home,name='home'),
     # this is the class based api calls from generics
     path('single/<int:pk>/',SingleProductApiView.as_view()),
+    
     path('create/',views.CreateView.as_view()),
+    
     path('list/',views.ListAll.as_view()),
     path('listANDcreate/',views.ListAllview_CreateView.as_view()),
+    
+    path('update/<int:pk>/',views.UpdateProductAPIView.as_view()),
+    path('delete/<int:pk>/',views.DeleteprodictAPIView.as_view()),
+    
+    # generic view is same but i have created many urls for understatnding the code
+    path('genericApiView/',views.Genericapiview.as_view()),
+    path('genericApiView/<int:pk>/',views.Genericapiview.as_view()),
     
     
     # this is the function based view call
