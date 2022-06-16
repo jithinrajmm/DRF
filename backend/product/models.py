@@ -17,6 +17,6 @@ class Product(models.Model):
     class Meta:
         db_table = ''
         managed = True
-        ordering = ('title',)
+        ordering = ('-id',)
         verbose_name = 'Product'
         verbose_name_plural = 'Products'

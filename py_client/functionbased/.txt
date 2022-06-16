@@ -1,0 +1,4 @@
+This method is used to define the getting the single product,gettting the all products, creating new one
+i made this single function in the product_view 
+the view that containing whole this function in a single method but i made here three separated file for accessing the 
+methods, dont confused, please look the endpoint i have provided in these three file 😀😎
