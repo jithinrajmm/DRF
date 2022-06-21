@@ -1,5 +1,4 @@
-from math import perm
-from turtle import title
+
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from django.http import JsonResponse
@@ -8,24 +7,29 @@ from product.serializer import ProductSerilaizer
 from rest_framework import permissions
 from rest_framework import authentication
 
+from product.permission import IsUserHavePermmision
+# from product.permission import isStaffHasViewPermission #=> in permission.py line number 14
 
 def home(reqeust):
     return JsonResponse('hai hello ',safe=False)
 class SingleProductApiView(generics.RetrieveAPIView):
     queryset = Product
     serializer_class = ProductSerilaizer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [IsUserHavePermmision]
     lookup_field = 'pk'
     # lookup_field  = pk default is pk 
     
 # this is the createAPIView for 
 # creation of model instance
 # from rest_framework import authentication
-
+# from product.permission import isStaffHasViewPermission
 class CreateView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerilaizer
     authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsUserHavePermmision]
     
     
     # in this create view we are adding the perform_create method for
@@ -46,6 +50,11 @@ class CreateView(generics.CreateAPIView):
 class ListAll(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerilaizer
+    permission_classes = [IsUserHavePermmision]
+    
+    # permission_classes = [isStaffHasViewPermission]   # this permission writen in permission.py line 14 
+    
+    # authentication_classes = [authentication.SessionAuthentication]
 # this is for the permissions
 # from rest_framework import permissions   
 class ListAllview_CreateView(generics.ListCreateAPIView):
@@ -55,13 +64,15 @@ class ListAllview_CreateView(generics.ListCreateAPIView):
     # permission_classes = [permissions.IsAuthenticated] # this method is restricted for get and post
     # permission_classes = [permissions.IsAuthenticatedOrReadOnly] # this method allow only get, not post
     # change to DjangoModelPermissions
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsUserHavePermmision]
+    # here we are getting the
     
     
     def perform_create(self, serializer):
         
         title = serializer.validated_data.get('title')
         content = serializer.validated_data.get('content') or None
+
         
         if content is None:
             content = title
@@ -108,6 +119,9 @@ def product_detail_create(request,pk=None,*args,**kwargs):
         else:
             return Response({'error':'There is some errors'},status=400)
 
+
+""" permission_classes = [permissions.isAdminUser,IsUserHavePermmision] if we are using this we will get the same 
+result, look the isAdminUser permission on the django restapis """
     
 # updataAPIView, and deleteAPIView
 
@@ -175,5 +189,6 @@ class Genericapiview(mixins.ListModelMixin,
             createAPIVIew extends the GenericAPIView and CreateModelMixin 
             means:
                  class CreateAPIView(mixin.createAPIView,generics.GenericAPIView '''
-        
+
+     
     
